@@ -7,8 +7,8 @@ int main()
 {
     char users_choice;
 
-    printf("*** Author: DusanDjordjic 2022. ***\n");
-    printf("*** This software is free to use by anyone. ***\n\n"); 
+    printf("***** Author: DusanDjordjic 2022. *******************\n");
+    printf("***** This software is free to use by anyone. *****\n\n"); 
     while(users_choice != 0)
     {
         users_choice = menu();
