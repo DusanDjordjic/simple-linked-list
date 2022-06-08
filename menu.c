@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "menu.h"
+#include "utils.h"
 
 #define BUF_SIZE 2
 
@@ -40,11 +41,7 @@ char* get_input()
         i++;
 
     // Flush the input stream to get rid of garbage data left over in input buffer
-    if(fflush(stdin) == EOF)
-    {
-        fprintf(stderr, "[ERROR] %d\n", errno);
-        exit(-1);
-    }
+    clear_ibuffer();
 
     // Set last bit to \0
     buffer[BUF_SIZE - 1] = '\0';
