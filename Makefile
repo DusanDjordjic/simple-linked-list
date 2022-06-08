@@ -1,8 +1,8 @@
 CC=clang
 CFLAGS=-I.
-SRC=main.c menu.c
-OBJ=main.o menu.o
-DEPS=linked_list.h menu.h
+SRC=main.c menu.c utils.c
+OBJ=main.o menu.o utils.o
+DEPS=linked_list.h menu.h utils.h
 BIN=app
 
 all: $(BIN)

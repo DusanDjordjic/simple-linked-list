@@ -37,11 +37,14 @@ char* get_input()
     char i = 0;
 
     // Get up to BUF_SIZE - 1 beacuse we want to set last byte no '\0' anyway
-    while((buffer[i] = getchar()) != '\n' || i < BUF_SIZE - 1)
+    while((buffer[i] = getchar()) != '\n' && i < BUF_SIZE - 1)
         i++;
-
-    // Flush the input stream to get rid of garbage data left over in input buffer
-    clear_ibuffer();
+    
+    // If didn`t get to the end or last char is '\n' we 
+    // don`t want to flush clear the buffer beacuse it will call
+    // getc again and propmt us to enter some text
+    if(i == BUF_SIZE - 1 && buffer[BUF_SIZE - 1] != '\n')
+        clear_ibuffer();
 
     // Set last bit to \0
     buffer[BUF_SIZE - 1] = '\0';
