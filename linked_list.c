@@ -82,21 +82,22 @@ Node* remove_item(Node* head)
         return head;
     }
 
-    while(head->next->id != id_to_remove)
+    Node* tmphead = head;
+    while(tmphead->next->id != id_to_remove)
     {
-        if(head->next == NULL)
+        if(tmphead->next->next == NULL)
         {
             printf("No item found with an id of %d\n", id_to_remove);
-            return 0;
+            return head;
         }
-        head = head->next;
+        tmphead = tmphead->next;
     } 
 
-    Node* tmp = head->next->next;
-    free(head->next);
+    Node* tmp = tmphead->next->next;
+    free(tmphead->next);
     printf("Removed item with an id of %d\n", id_to_remove);
     printf("At the end\n");
-    head->next = tmp;
+    tmphead->next = tmp;
     return head;
 }
 

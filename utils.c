@@ -29,7 +29,6 @@ char* get_string(int size, const char* prompt)
         buffer = (char*)realloc(buffer, sizeof(char) * (i + 1));
 
     buffer[i] = '\0';
-    printf("Buffer is %s\n", buffer);
     return buffer;
 }
 
