@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "linked_list.h"
 #include "menu.h"
 
 int main()
@@ -9,22 +10,31 @@ int main()
 
     printf("***** Author: DusanDjordjic 2022. *******************\n");
     printf("***** This software is free to use by anyone. *****\n\n"); 
+    
+    // Loading list
+    Node* head = load_list();
+    
     while(users_choice != 0)
     {
         users_choice = menu();
         switch(users_choice)
         {
             case '1':
-                    printf("Option 1\n");
+                    head = load_list();
                     break;
             case '2':
-                    printf("Option 2\n");
+                    print_list(head);
                     break;
             case '3':
-                    printf("Option 3\n");
+                    if(head == NULL)
+                        head = add_item(1);
+                    else
+                        add_item_to_end(head);
                     break;
             case '4':
-                    printf("Option 4\n");
+                    head = remove_item(head);
+                    break;
+            case '5':
                     break;
             case '0':
                     printf("Bye have a great time\n");
