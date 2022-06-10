@@ -26,10 +26,7 @@ int main()
                     print_list(head);
                     break;
             case '3':
-                    if(head == NULL)
-                        head = add_item(1);
-                    else
-                        add_item_to_end(head);
+                    add_item(&head);
                     break;
             case '4':
                     head = remove_item(head);

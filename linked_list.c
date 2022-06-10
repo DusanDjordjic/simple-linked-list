@@ -20,23 +20,9 @@ void print_list(Node* head)
     }
 }
 
-int add_item_to_end(Node* head)
+int add_item(Node** phead)
 {
-    
-    // See main.c case '2'
-    if(head == NULL)
-        return 0;
-
-    while(head->next != NULL)
-        head = head->next;
-
-    // Id of next node will be last id added + 1
-    head->next = add_item(head->id + 1);
-    return 0;
-}
-
-Node* add_item(int next_id)
-{
+     
     Node* node = (Node*)malloc(sizeof(Node));
 
     if(node == NULL)
@@ -44,13 +30,26 @@ Node* add_item(int next_id)
         perror("Error while allocating memory for new node");
         exit(-1);
     }
-
-    // Add 1 to last id so we get unique ids
+    
+    int next_id = 1; 
+    if(*phead == NULL)
+        *phead = node;
+    else
+    {
+        Node* tmphead = *phead;
+        while(tmphead->next != NULL)
+            tmphead = tmphead->next;
+        
+        tmphead->next = node;
+        next_id = tmphead->id + 1;
+    }
+    
     node->id = next_id;
     node->name = get_string(NAME_SIZE, "Enter new name");
     node->next = NULL;
-    return node;
+    return 0;
 }
+
 
 Node* remove_item(Node* head)
 {
