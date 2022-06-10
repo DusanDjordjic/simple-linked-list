@@ -6,14 +6,13 @@
 
 int main()
 {
-    char users_choice;
 
-    printf("***** Author: DusanDjordjic 2022. ******************************\n");
+    printf("\n\n***** Author: DusanDjordjic 2022. ******************************\n");
     printf("***** This software is free to use and modify by anyone. *****\n\n"); 
     
-    // Loading list
-    Node* head = load_list();
-    
+    Node* head = NULL; 
+    char users_choice;
+
     while(users_choice != 0)
     {
         users_choice = menu();
@@ -32,9 +31,11 @@ int main()
                     remove_item(&head);
                     break;
             case '5':
+                    edit_item(head);  
                     break;
             case '0':
                     printf("Bye have a great time.\n");
+                    free_list(head);
                     return 0;
             default:
                 printf("Invalid option.\n");

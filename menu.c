@@ -23,7 +23,6 @@ char menu()
     char user_choice = buffer[0];
 
     free(buffer);
-    printf("\n");    
     return user_choice;
 }
 

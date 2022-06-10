@@ -20,6 +20,17 @@ void print_list(Node* head)
     }
 }
 
+void print_item(Node* head)
+{
+    if(head == NULL)
+    {
+        printf("No items added yet.\n");
+        return;
+    }
+
+    printf("Item %d: %s\n", head->id, head->name);
+}
+
 int add_item(Node** phead)
 {
      
@@ -27,7 +38,7 @@ int add_item(Node** phead)
 
     if(node == NULL)
     {
-        perror("Error while allocating memory for new node");
+        perror("Error while allocating memory for new node\n");
         return -1;
     }
     
@@ -47,21 +58,24 @@ int add_item(Node** phead)
     node->id = next_id;
     node->name = get_string(NAME_SIZE, "Enter new name");
     node->next = NULL;
+    printf("Item successfully added\n");
     return 0;
 }
 
 
 int remove_item(Node** phead)
 {
-    int id_to_remove = -1;
-    printf("Enter an id to remove: ");
-    scanf("%d", &id_to_remove);
-    // Clear input buffer or leading white space and '\n'
-    clear_ibuffer();
+    if(*phead == NULL)
+    {
+        printf("List is empty.\n");
+        return -1;
+    }
+
+    int id_to_remove = get_int("Enter ad id to remove: ");
 
     if(id_to_remove < 1)
     {
-        printf("Invalid id: %d", id_to_remove);
+        printf("Invalid id: %d\n", id_to_remove);
         return -1;
     }
 
@@ -69,11 +83,6 @@ int remove_item(Node** phead)
     Node* tmphead = *phead;
     Node* prev = NULL;
     
-    if(tmphead == NULL)
-    {
-        printf("List is empty.\n");
-        return -1;
-    }
 
     if(tmphead->id == id_to_remove)
     {
@@ -83,12 +92,6 @@ int remove_item(Node** phead)
         return -1;
     }
     
-    // 1 Dusan
-    // 2 Joka
-    // 3 Aca 
-    // 4 Cone
-
-    // 
     while(tmphead != NULL && tmphead->id != id_to_remove)
     {
         prev = tmphead;
@@ -104,6 +107,52 @@ int remove_item(Node** phead)
     prev->next = tmphead->next;
     printf("Removed item with an id of %d\n", id_to_remove);
     free(tmphead);
+    return 0;
+}
+
+int edit_item(Node* head)
+{
+    if(head == NULL)
+    {
+        printf("List is empty.\n");
+        return -1;
+    }
+
+    int id_to_edit = get_int("Enter an item id: ");
+
+    if(id_to_edit < 1)
+    {
+        printf("Invalid id: %d", id_to_edit);
+        return -1;
+    }
+
+    while(head != NULL && head->id != id_to_edit)
+        head = head->next;
+
+    if(head == NULL)
+    {
+        printf("No item found with an id of %d\n", id_to_edit);
+        return -1;
+    }
+    
+    printf("This item will be edited\n");
+    print_item(head);
+
+    char* new_name = get_string(NAME_SIZE, "Enter new name");
+    
+    char choice = get_char("Are you sure you want to edit this item?");
+
+    if(choice == 'n' || choice == 'N')
+    {
+        free(new_name);
+        return -1;
+    }
+    
+    free(head->name);
+    head->name = new_name;
+
+    printf("Item successfully edited\n");
+
     return 0;
 }
 
