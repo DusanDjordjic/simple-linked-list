@@ -28,7 +28,7 @@ int add_item(Node** phead)
     if(node == NULL)
     {
         perror("Error while allocating memory for new node");
-        exit(-1);
+        return -1;
     }
     
     int next_id = 1; 
@@ -51,7 +51,7 @@ int add_item(Node** phead)
 }
 
 
-Node* remove_item(Node* head)
+int remove_item(Node** phead)
 {
     int id_to_remove = -1;
     printf("Enter an id to remove: ");
@@ -59,45 +59,52 @@ Node* remove_item(Node* head)
     // Clear input buffer or leading white space and '\n'
     clear_ibuffer();
 
-    if(head == NULL)
+    if(id_to_remove < 1)
     {
-        printf("No item found with an id of %d\n", id_to_remove);
-        return NULL;
+        printf("Invalid id: %d", id_to_remove);
+        return -1;
     }
 
-    if(head->id == id_to_remove)
+    
+    Node* tmphead = *phead;
+    Node* prev = NULL;
+    
+    if(tmphead == NULL)
     {
-        Node* tmp = head->next;
+        printf("List is empty.\n");
+        return -1;
+    }
+
+    if(tmphead->id == id_to_remove)
+    {
+        *phead = tmphead->next;
         printf("Removed item with an id of %d\n", id_to_remove);
-        printf("It was head\n");
-        free(head);
-        return tmp;
+        free(tmphead);
+        return -1;
     }
     
-    if(head->next == NULL)
-    {
-        printf("No item found with an id of %d\n", id_to_remove);
-        printf("head->next == NULL\n");
-        return head;
-    }
+    // 1 Dusan
+    // 2 Joka
+    // 3 Aca 
+    // 4 Cone
 
-    Node* tmphead = head;
-    while(tmphead->next->id != id_to_remove)
+    // 
+    while(tmphead != NULL && tmphead->id != id_to_remove)
     {
-        if(tmphead->next->next == NULL)
-        {
-            printf("No item found with an id of %d\n", id_to_remove);
-            return head;
-        }
+        prev = tmphead;
         tmphead = tmphead->next;
     } 
-
-    Node* tmp = tmphead->next->next;
-    free(tmphead->next);
+    
+    if(tmphead == NULL)
+    {
+        printf("No item found with an id of %d\n", id_to_remove);
+        return -1;
+    }
+    
+    prev->next = tmphead->next;
     printf("Removed item with an id of %d\n", id_to_remove);
-    printf("At the end\n");
-    tmphead->next = tmp;
-    return head;
+    free(tmphead);
+    return 0;
 }
 
 void free_list(Node* head)
@@ -120,11 +127,4 @@ Node* load_list()
     head->next = NULL;
     return head;
 }
-
-
-
-
-
-
-
 

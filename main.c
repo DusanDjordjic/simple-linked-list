@@ -8,8 +8,8 @@ int main()
 {
     char users_choice;
 
-    printf("***** Author: DusanDjordjic 2022. *******************\n");
-    printf("***** This software is free to use by anyone. *****\n\n"); 
+    printf("***** Author: DusanDjordjic 2022. ******************************\n");
+    printf("***** This software is free to use and modify by anyone. *****\n\n"); 
     
     // Loading list
     Node* head = load_list();
@@ -29,15 +29,15 @@ int main()
                     add_item(&head);
                     break;
             case '4':
-                    head = remove_item(head);
+                    remove_item(&head);
                     break;
             case '5':
                     break;
             case '0':
-                    printf("Bye have a great time\n");
+                    printf("Bye have a great time.\n");
                     return 0;
             default:
-                printf("\"%c\" is not a valid option\n\n", users_choice);
+                printf("Invalid option.\n");
                 break;
         }
     }

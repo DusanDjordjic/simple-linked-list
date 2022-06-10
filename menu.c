@@ -16,7 +16,7 @@ char menu()
     printf("(5) Edit an item\n");
     printf("(0) Exit\n");
 
-    // Change BUF_SIZE as you need
+    // Change MENU_BUF_SIZE as you need
     buffer = get_string(MENU_BUF_SIZE, "Your choice" );
 
     // Copy first char to new variable so it does not get lost

@@ -23,6 +23,11 @@ char* get_string(int size, const char* prompt)
     while((buffer[i] = getchar()) != '\n' && i < size)
             i++;
 
+    // If use just pressed enter
+    // Return invalid option
+    if(buffer[0] == '\n')
+        return " ";
+        
     if(i == size && buffer[i] != '\n')
         clear_ibuffer();
     else if(i < size)
