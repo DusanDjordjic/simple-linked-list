@@ -1,36 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "linked_list.h"
 #include "menu.h"
 
 int main()
 {
+
+    printf("\n\n***** Author: DusanDjordjic 2022. ****************************\n");
+    printf("***** This software is free to use and modify by anyone. *****\n\n"); 
+    
+    Node* head = NULL; 
     char users_choice;
 
-    printf("***** Author: DusanDjordjic 2022. *******************\n");
-    printf("***** This software is free to use by anyone. *****\n\n"); 
     while(users_choice != 0)
     {
         users_choice = menu();
         switch(users_choice)
         {
             case '1':
-                    printf("Option 1\n");
+                    head = load_list();
                     break;
             case '2':
-                    printf("Option 2\n");
+                    print_list(head);
                     break;
             case '3':
-                    printf("Option 3\n");
+                    add_item(&head);
                     break;
             case '4':
-                    printf("Option 4\n");
+                    remove_item(&head);
+                    break;
+            case '5':
+                    edit_item(head);  
                     break;
             case '0':
-                    printf("Bye have a great time\n");
+                    printf("Bye have a great time.\n");
+                    free_list(head);
                     return 0;
             default:
-                printf("\"%c\" is not a valid option\n\n", users_choice);
+                printf("Invalid option.\n");
                 break;
         }
     }
