@@ -7,7 +7,7 @@
 int main()
 {
 
-    printf("\n\n***** Author: DusanDjordjic 2022. ******************************\n");
+    printf("\n\n***** Author: DusanDjordjic 2022. ****************************\n");
     printf("***** This software is free to use and modify by anyone. *****\n\n"); 
     
     Node* head = NULL; 

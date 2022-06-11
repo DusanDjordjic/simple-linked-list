@@ -27,7 +27,7 @@ char* get_string(int size, const char* prompt)
     // Return invalid option
     if(buffer[0] == '\n')
     {
-        buffer[0] = '-';
+        buffer[0] = '\0';
         printf("\n");
         return buffer;
     }
