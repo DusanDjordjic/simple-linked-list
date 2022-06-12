@@ -1,9 +1,9 @@
 #ifndef _LINKED_LIST_H_
 #define _LINKED_LIST_H_
+#include "item.h"
 
 struct Node {
-    char* name;
-    int id;
+    Item* item;
     struct Node* next;
 };
 

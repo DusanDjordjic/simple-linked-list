@@ -4,6 +4,7 @@
 #include "linked_list.h"
 #include "utils.h"
 #include "defs.h"
+#include "item.h"
 
 void print_list(Node* head)
 {
@@ -15,7 +16,7 @@ void print_list(Node* head)
 
     while(head != NULL)
     {
-        printf("Item %d: %s\n", head->id, head->name);
+        item_print(head->item);
         head = head->next;
     }
 }
@@ -27,14 +28,15 @@ void print_item(Node* head)
         printf("No items added yet.\n");
         return;
     }
-
-    printf("Item %d: %s\n", head->id, head->name);
+    
+    item_print(head->item);
 }
 
 int add_item(Node** phead)
 {
      
     Node* node = (Node*)malloc(sizeof(Node));
+    Item* new_item = (Item*)malloc(sizeof(Item));
 
     if(node == NULL)
     {
@@ -52,11 +54,13 @@ int add_item(Node** phead)
             tmphead = tmphead->next;
         
         tmphead->next = node;
-        next_id = tmphead->id + 1;
+        next_id = tmphead->item->id + 1;
     }
-    
-    node->id = next_id;
-    node->name = get_string(NAME_SIZE, "Enter new name");
+
+    new_item->id = next_id;
+    new_item->name = get_string(NAME_SIZE, "Enter new name");
+
+    node->item = new_item;
     node->next = NULL;
     printf("Item successfully added\n");
     return 0;
@@ -84,15 +88,16 @@ int remove_item(Node** phead)
     Node* prev = NULL;
     
 
-    if(tmphead->id == id_to_remove)
+    if(tmphead->item->id == id_to_remove)
     {
         *phead = tmphead->next;
         printf("Removed item with an id of %d\n", id_to_remove);
+        free(tmphead->item);
         free(tmphead);
         return -1;
     }
     
-    while(tmphead != NULL && tmphead->id != id_to_remove)
+    while(tmphead != NULL && tmphead->item->id != id_to_remove)
     {
         prev = tmphead;
         tmphead = tmphead->next;
@@ -106,6 +111,7 @@ int remove_item(Node** phead)
     
     prev->next = tmphead->next;
     printf("Removed item with an id of %d\n", id_to_remove);
+    free(tmphead->item);
     free(tmphead);
     return 0;
 }
@@ -126,7 +132,7 @@ int edit_item(Node* head)
         return -1;
     }
 
-    while(head != NULL && head->id != id_to_edit)
+    while(head != NULL && head->item->id != id_to_edit)
         head = head->next;
 
     if(head == NULL)
@@ -148,8 +154,8 @@ int edit_item(Node* head)
         return -1;
     }
     
-    free(head->name);
-    head->name = new_name;
+    free(head->item->name);
+    head->item->name = new_name;
 
     printf("Item successfully edited\n");
 
@@ -163,6 +169,7 @@ void free_list(Node* head)
     {
         tmp = head;
         head = head->next;
+        free(tmp->item);
         free(tmp);
     }
 }
@@ -170,10 +177,5 @@ void free_list(Node* head)
 Node* load_list()
 {
     return NULL;
-    Node* head = (Node*)malloc(sizeof(Node));
-    head->id = 1;
-    head->name = "Head";
-    head->next = NULL;
-    return head;
 }
 
