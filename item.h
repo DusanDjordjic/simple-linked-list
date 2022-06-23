@@ -4,8 +4,8 @@
 struct Item
 {
     int id;
-    char* name;
     int name_len;
+    char* name;
 };
 
 typedef struct Item Item;

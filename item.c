@@ -5,6 +5,6 @@ void item_print(Item* item)
 {
     if(item == NULL)
         return;
-
-    printf("Item %d: %s\n", item->id, item->name);
+    
+    printf("%d | %s | %d\n", item->id, item->name, item->name_len);
 }

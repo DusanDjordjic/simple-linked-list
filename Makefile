@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-I.
+CFLAGS=-I. -O1 -fsanitize=address -fno-omit-frame-pointer   
 SRC=main.c menu.c linked_list.c utils.c item.c
 OBJ=main.o menu.o linked_list.o utils.o item.o
 DEPS=linked_list.h menu.h utils.h defs.h item.h

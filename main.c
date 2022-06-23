@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "linked_list.h"
 #include "menu.h"
 
@@ -12,6 +11,7 @@ int main()
     
     Node* head = NULL; 
     char users_choice;
+    const char* filename = "ll.bin";
 
     while(users_choice != 0)
     {
@@ -19,7 +19,7 @@ int main()
         switch(users_choice)
         {
             case '1':
-                    head = load_list();
+                    load_list(filename, &head);
                     break;
             case '2':
                     print_list(head);
@@ -33,9 +33,12 @@ int main()
             case '5':
                     edit_item(head);  
                     break;
+            case '6':
+                    save_list(head, filename);
+                    break;
             case '0':
                     printf("Bye have a great time.\n");
-                    free_list(head);
+                    free_list(&head);
                     return 0;
             default:
                 printf("Invalid option.\n");

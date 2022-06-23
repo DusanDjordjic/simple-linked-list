@@ -14,10 +14,11 @@ char menu()
     printf("(3) Add an item\n");
     printf("(4) Remove an item\n");
     printf("(5) Edit an item\n");
+    printf("(6) Save list\n");
     printf("(0) Exit\n");
 
     // Change MENU_BUF_SIZE as you need
-    buffer = get_string(MENU_BUF_SIZE, "Your choice" );
+    buffer = get_string(MENU_BUF_SIZE, "Your choice", NULL);
 
     // Copy first char to new variable so it does not get lost
     char user_choice = buffer[0];
