@@ -8,9 +8,8 @@ void clear_ibuffer()
     while(getchar() != '\n');
 } 
 
-char* get_string(int size, const char* prompt)
+char* get_string(int size, const char* prompt, int* o_size)
 {
-
     printf("%s (max %d): ", prompt, size);
 
     char* buffer = (char*)malloc(sizeof(char) * (size + 1));
@@ -29,6 +28,8 @@ char* get_string(int size, const char* prompt)
     {
         buffer[0] = '-';
         buffer[1] = '\0';
+        if(o_size != NULL)
+            *o_size = 2;
         printf("\n");
         return buffer;
     }
@@ -39,6 +40,8 @@ char* get_string(int size, const char* prompt)
         buffer = (char*)realloc(buffer, sizeof(char) * (i + 1));
 
     buffer[i] = '\0';
+    if(o_size != NULL)
+        *o_size = i + 1;
     printf("\n");
     return buffer;
 }

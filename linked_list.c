@@ -58,7 +58,7 @@ int add_item(Node** phead)
     }
 
     new_item->id = next_id;
-    new_item->name = get_string(NAME_SIZE, "Enter new name");
+    new_item->name = get_string(NAME_SIZE, "Enter new name", &new_item->name_len);
 
     node->item = new_item;
     node->next = NULL;
@@ -111,6 +111,7 @@ int remove_item(Node** phead)
     
     prev->next = tmphead->next;
     printf("Removed item with an id of %d\n", id_to_remove);
+    free(tmphead->item->name);
     free(tmphead->item);
     free(tmphead);
     return 0;
@@ -143,8 +144,8 @@ int edit_item(Node* head)
     
     printf("This item will be edited\n");
     print_item(head);
-
-    char* new_name = get_string(NAME_SIZE, "Enter new name");
+    int new_name_size = 0;
+    char* new_name = get_string(NAME_SIZE, "Enter new name", &new_name_size);
     
     char choice = get_char("Are you sure you want to edit this item?");
 
@@ -156,26 +157,103 @@ int edit_item(Node* head)
     
     free(head->item->name);
     head->item->name = new_name;
+    head->item->name_len = new_name_size;
 
     printf("Item successfully edited\n");
 
     return 0;
 }
 
-void free_list(Node* head)
+void free_list(Node** phead)
 {
     Node* tmp;
+    Node* head = *phead;
     while(head != NULL)
     {
         tmp = head;
         head = head->next;
+        free(tmp->item->name);
         free(tmp->item);
         free(tmp);
     }
 }
 
-Node* load_list()
+void load_list(const char* filename, Node** phead)
 {
-    return NULL;
+    FILE* data_file = fopen(filename, "rb");
+
+    if(data_file == NULL)
+    {
+        printf("%s file not found\n", filename);
+        *phead = NULL;
+        return;
+    }
+
+    if(*phead != NULL)
+    {
+        printf("Free list before load\n");
+        free_list(phead);
+        *phead = NULL;
+    }
+
+    int read_bytes = 1;
+    while(read_bytes > 0)
+    {
+        Node* new_node = (Node*)malloc(sizeof(Node));
+        Item* new_item = (Item*)malloc(sizeof(Item));
+
+        read_bytes = fread(&(new_item->id), sizeof(int), 1, data_file);
+        if(read_bytes <= 0)
+        {
+            printf("Stop 1\n");
+            free(new_node);
+            free(new_item);
+            break;
+        }
+
+        read_bytes = fread(&(new_item->name_len), sizeof(int), 1, data_file);
+        if(read_bytes <= 0)
+        {
+            printf("Stop 2\n");
+            free(new_node);
+            free(new_item);
+            break;
+        }
+        new_item->name = (char*)malloc(sizeof(char) * new_item->name_len);
+        read_bytes = fread(new_item->name, sizeof(char) * new_item->name_len, 1, data_file);
+        if(read_bytes <= 0)
+        {
+            printf("Stop 3\n");
+        }
+
+        new_node->item = new_item;
+        new_node->next = *phead;
+        *phead = new_node;
+    }
 }
 
+void save_list(Node* head, const char* filename)
+{
+    FILE* data_file = fopen(filename, "wb");
+
+    if(data_file == NULL)
+    {
+        printf("Could not open %s file for writing\n", filename);
+        fclose(data_file);
+        return;
+    }
+
+    int byte_counter = 0;
+    while(head != NULL)
+    {
+        fwrite(&(head->item->id), sizeof(int), 1, data_file);
+        fwrite(&(head->item->name_len), sizeof(int), 1, data_file);
+        fwrite(head->item->name, sizeof(char) * head->item->name_len, 1, data_file);
+        byte_counter += sizeof(int) * 2 + sizeof(char) * head->item->name_len; 
+        head = head->next;
+    }
+    
+    fclose(data_file);
+
+    printf("Wrote %d bytes\n", byte_counter);
+}
