@@ -36,6 +36,9 @@ int main()
             case '6':
                     save_list(head, filename);
                     break;
+            case '7':
+                    reverse_list(&head);
+                    break;
             case '0':
                     printf("Bye have a great time.\n");
                     free_list(&head);

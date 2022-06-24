@@ -15,6 +15,7 @@ char menu()
     printf("(4) Remove an item\n");
     printf("(5) Edit an item\n");
     printf("(6) Save list\n");
+    printf("(7) Reverse list\n");
     printf("(0) Exit\n");
 
     // Change MENU_BUF_SIZE as you need

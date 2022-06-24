@@ -14,6 +14,7 @@ void print_item(Node* head);
 int add_item(Node** phead);
 int remove_item(Node** head);
 int edit_item(Node* head);
+int reverse_list(Node** head);
 void free_list(Node** phead);
 void load_list(const char* filename, Node** phead);
 void save_list(Node* head, const char* filename);

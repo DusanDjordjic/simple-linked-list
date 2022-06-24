@@ -38,9 +38,11 @@ int add_item(Node** phead)
     Node* node = (Node*)malloc(sizeof(Node));
     Item* new_item = (Item*)malloc(sizeof(Item));
 
-    if(node == NULL)
+    if(node == NULL || new_item == NULL)
     {
         perror("Error while allocating memory for new node\n");
+        free(node);
+        free(new_item);
         return -1;
     }
     
@@ -92,6 +94,7 @@ int remove_item(Node** phead)
     {
         *phead = tmphead->next;
         printf("Removed item with an id of %d\n", id_to_remove);
+        free(tmphead->item->name);
         free(tmphead->item);
         free(tmphead);
         return -1;
@@ -164,6 +167,35 @@ int edit_item(Node* head)
     return 0;
 }
 
+int reverse_list(Node** phead)
+{
+    if(*phead == NULL)
+    {
+        printf("List is empty.\n");
+        return -1;
+    }
+
+    if((*phead)->next == NULL)
+    {
+        printf("List has only one item.\n");
+        return -1;
+    }
+
+    Node* slow = NULL;
+    Node* fast = *phead;
+
+    while(fast != NULL)
+    {
+        Node* tmp = fast;
+        fast = fast->next;
+        tmp->next = slow;
+        slow = tmp;
+    }
+    print_list(slow);
+    *phead = slow;
+
+    return 0;
+}
 void free_list(Node** phead)
 {
     Node* tmp;
@@ -205,31 +237,21 @@ void load_list(const char* filename, Node** phead)
         read_bytes = fread(&(new_item->id), sizeof(int), 1, data_file);
         if(read_bytes <= 0)
         {
-            printf("Stop 1\n");
             free(new_node);
             free(new_item);
             break;
         }
 
-        read_bytes = fread(&(new_item->name_len), sizeof(int), 1, data_file);
-        if(read_bytes <= 0)
-        {
-            printf("Stop 2\n");
-            free(new_node);
-            free(new_item);
-            break;
-        }
+        fread(&(new_item->name_len), sizeof(int), 1, data_file);
+
         new_item->name = (char*)malloc(sizeof(char) * new_item->name_len);
-        read_bytes = fread(new_item->name, sizeof(char) * new_item->name_len, 1, data_file);
-        if(read_bytes <= 0)
-        {
-            printf("Stop 3\n");
-        }
+        fread(new_item->name, sizeof(char) * new_item->name_len, 1, data_file);
 
         new_node->item = new_item;
         new_node->next = *phead;
         *phead = new_node;
     }
+    reverse_list(phead);
 }
 
 void save_list(Node* head, const char* filename)
@@ -252,7 +274,6 @@ void save_list(Node* head, const char* filename)
         byte_counter += sizeof(int) * 2 + sizeof(char) * head->item->name_len; 
         head = head->next;
     }
-    
     fclose(data_file);
 
     printf("Wrote %d bytes\n", byte_counter);
