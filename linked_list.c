@@ -4,9 +4,8 @@
 #include "linked_list.h"
 #include "utils.h"
 #include "defs.h"
-#include "item.h"
 
-void print_list(Node* head)
+void print_list(Node* head, ioperation iprint)
 {
     if(head == NULL)
     {
@@ -16,33 +15,30 @@ void print_list(Node* head)
 
     while(head != NULL)
     {
-        item_print(head->item);
+        iprint(head->item);
         head = head->next;
     }
 }
 
-void print_item(Node* head)
+void print_item(Node* head, ioperation iprint)
 {
     if(head == NULL)
     {
         printf("No items added yet.\n");
         return;
     }
-    
-    item_print(head->item);
+    iprint(head->item);
 }
 
-int add_item(Node** phead)
+int add_item(Node** phead, igenerate igen)
 {
      
     Node* node = (Node*)malloc(sizeof(Node));
-    Item* new_item = (Item*)malloc(sizeof(Item));
 
-    if(node == NULL || new_item == NULL)
+    if(node == NULL)
     {
         perror("Error while allocating memory for new node\n");
         free(node);
-        free(new_item);
         return -1;
     }
     
@@ -56,21 +52,19 @@ int add_item(Node** phead)
             tmphead = tmphead->next;
         
         tmphead->next = node;
-        next_id = tmphead->item->id + 1;
     }
 
-    new_item->id = next_id;
-    new_item->name = get_string(NAME_SIZE, "Enter new name", &new_item->name_len);
-
-    node->item = new_item;
+    node->item = igen();
     node->next = NULL;
     printf("Item successfully added\n");
     return 0;
 }
 
 
-int remove_item(Node** phead)
+int remove_item(Node** phead, ioperation ifree)
 {
+    return 0;
+    /*
     if(*phead == NULL)
     {
         printf("List is empty.\n");
@@ -89,13 +83,12 @@ int remove_item(Node** phead)
     Node* tmphead = *phead;
     Node* prev = NULL;
     
-
+    
     if(tmphead->item->id == id_to_remove)
     {
         *phead = tmphead->next;
         printf("Removed item with an id of %d\n", id_to_remove);
-        free(tmphead->item->name);
-        free(tmphead->item);
+        ifree(tmphead->item);
         free(tmphead);
         return -1;
     }
@@ -114,14 +107,16 @@ int remove_item(Node** phead)
     
     prev->next = tmphead->next;
     printf("Removed item with an id of %d\n", id_to_remove);
-    free(tmphead->item->name);
-    free(tmphead->item);
+    ifree(tmphead->item);
     free(tmphead);
+    */
     return 0;
 }
 
-int edit_item(Node* head)
+int edit_item(Node* head, ioperation iprint, ioperation ifree, igenerate igen)
 {
+    return 0;
+    /*
     if(head == NULL)
     {
         printf("List is empty.\n");
@@ -146,25 +141,23 @@ int edit_item(Node* head)
     }
     
     printf("This item will be edited\n");
-    print_item(head);
-    int new_name_size = 0;
-    char* new_name = get_string(NAME_SIZE, "Enter new name", &new_name_size);
-    
+    print_item(head, iprint);
+    void* new_item = igen(); 
     char choice = get_char("Are you sure you want to edit this item?");
 
     if(choice == 'n' || choice == 'N')
     {
-        free(new_name);
+        ifree(new_item);
         return -1;
     }
     
-    free(head->item->name);
-    head->item->name = new_name;
-    head->item->name_len = new_name_size;
+    ifree(head->item);
+    head->item = new_item;
 
     printf("Item successfully edited\n");
 
     return 0;
+    */
 }
 
 int reverse_list(Node** phead)
@@ -191,12 +184,11 @@ int reverse_list(Node** phead)
         tmp->next = slow;
         slow = tmp;
     }
-    print_list(slow);
     *phead = slow;
 
     return 0;
 }
-void free_list(Node** phead)
+void free_list(Node** phead, ioperation ifree)
 {
     Node* tmp;
     Node* head = *phead;
@@ -204,13 +196,12 @@ void free_list(Node** phead)
     {
         tmp = head;
         head = head->next;
-        free(tmp->item->name);
-        free(tmp->item);
+        ifree(tmp->item);
         free(tmp);
     }
 }
 
-void load_list(const char* filename, Node** phead)
+void load_list(const char* filename, Node** phead, ioperation ifree)
 {
     FILE* data_file = fopen(filename, "rb");
 
@@ -224,7 +215,7 @@ void load_list(const char* filename, Node** phead)
     if(*phead != NULL)
     {
         printf("Free list before load\n");
-        free_list(phead);
+        free_list(phead, ifree);
         *phead = NULL;
     }
 
@@ -256,6 +247,7 @@ void load_list(const char* filename, Node** phead)
 
 void save_list(Node* head, const char* filename)
 {
+    /*
     FILE* data_file = fopen(filename, "wb");
 
     if(data_file == NULL)
@@ -277,4 +269,5 @@ void save_list(Node* head, const char* filename)
     fclose(data_file);
 
     printf("Wrote %d bytes\n", byte_counter);
+    */
 }

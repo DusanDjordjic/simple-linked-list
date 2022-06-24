@@ -19,19 +19,19 @@ int main()
         switch(users_choice)
         {
             case '1':
-                    load_list(filename, &head);
+                    load_list(filename, &head, item_free);
                     break;
             case '2':
-                    print_list(head);
+                    print_list(head, item_print);
                     break;
             case '3':
-                    add_item(&head);
+                    add_item(&head, item_gen);
                     break;
             case '4':
-                    remove_item(&head);
+                    remove_item(&head, item_free);
                     break;
             case '5':
-                    edit_item(head);  
+                    edit_item(head, item_print, item_free, item_gen);  
                     break;
             case '6':
                     save_list(head, filename);
@@ -41,7 +41,7 @@ int main()
                     break;
             case '0':
                     printf("Bye have a great time.\n");
-                    free_list(&head);
+                    free_list(&head, item_free);
                     return 0;
             default:
                 printf("Invalid option.\n");

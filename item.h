@@ -11,6 +11,8 @@ struct Item
 typedef struct Item Item;
 
 
-void item_print(Item* item);
+void item_print(void* item);
+void* item_gen();
+void item_free(void* item);
 
 #endif
